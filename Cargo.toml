@@ -1,13 +1,13 @@
 [package]
 name = "ring-algorithm"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Toru3 <ryuutet@gmail.com>"]
 edition = "2018"
 description = "algorithms on ring(Abstruct Algebra)"
 license = "MIT OR Apache-2.0"
 repository = "https://gitlab.com/Toru3/ring-algorithm"
 keywords = ["algorithm", "ring", "algebra", "polynomial"]
-categories = ["Algorithms", "Mathematics"]
+categories = ["algorithms", "mathematics"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
