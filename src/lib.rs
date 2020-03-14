@@ -1,6 +1,5 @@
 #![cfg_attr(feature = "debug", recursion_limit = "8")]
 mod polynomial;
-mod residue_class_ring;
 mod ring_traits;
 #[cfg(test)]
 mod test;
