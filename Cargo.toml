@@ -1,6 +1,6 @@
 [package]
 name = "ring-algorithm"
-version = "0.1.5"
+version = "0.1.6"
 authors = ["Toru3 <ryuutet@gmail.com>"]
 edition = "2018"
 description = "algorithms on ring(Abstruct Algebra)"
@@ -17,14 +17,14 @@ categories = ["algorithms", "mathematics"]
 [dependencies]
 num-traits = "0.2.11"
 take_mut = "0.2.2"
+katex-doc = "0.1.0"
 [dev-dependencies]
 num = "0.2.1"
-#katex-doc = "0.1.0"
 [features]
 default = []
 debug = []
-#[package.metadata.docs.rs]
-#rustdoc-args = [
-#    "--html-in-header",
-#    ".cargo/registry/src/github.com-1ecc6299db9ec823/katex-doc-0.1.0/katex.html",
-#]
+[package.metadata.docs.rs]
+rustdoc-args = [
+    "--html-in-header",
+    ".cargo/registry/src/github.com-1ecc6299db9ec823/katex-doc-0.1.0/katex.html",
+]
