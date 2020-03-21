@@ -85,15 +85,6 @@ pub trait RingNormalize {
     }
 }
 
-#[cfg(feature = "debug")]
-pub trait DebugOnFeature: std::fmt::Debug + std::fmt::Display {}
-#[cfg(feature = "debug")]
-impl<T> DebugOnFeature for T where T: std::fmt::Debug + std::fmt::Display {}
-#[cfg(not(feature = "debug"))]
-pub trait DebugOnFeature {}
-#[cfg(not(feature = "debug"))]
-impl<T> DebugOnFeature for T {}
-
 macro_rules! ring_normalize {
     ($t:ty) => {
         impl RingNormalize for $t {
