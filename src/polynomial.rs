@@ -1,4 +1,5 @@
-use crate::ring_traits::{DebugOnFeature, RingNormalize};
+use crate::ring_traits::RingNormalize;
+use crate::sealed;
 use num_traits::{One, Zero};
 use std::ops::*;
 
@@ -28,8 +29,8 @@ macro_rules! from_assign {
 }
 
 // additive monoid
-pub trait AddAssignRequire<M>: Clone + Zero + for<'x> AddAssign<&'x M> + DebugOnFeature {}
-impl<M> AddAssignRequire<M> for M where M: Clone + Zero + for<'x> AddAssign<&'x M> + DebugOnFeature {}
+pub trait AddAssignRequire<M>: sealed::Sized + Clone + Zero + for<'x> AddAssign<&'x M> {}
+impl<M> AddAssignRequire<M> for M where M: sealed::Sized + Clone + Zero + for<'x> AddAssign<&'x M> {}
 impl<'a, M: AddAssignRequire<M>> AddAssign<&'a Polynomial<M>> for Polynomial<M> {
     fn add_assign(&mut self, other: &Polynomial<M>) {
         let len = self.len();
@@ -57,7 +58,7 @@ impl<M: AddAssignRequire<M>> std::iter::Sum for Polynomial<M> {
         iter.fold(Self::zero(), Add::add)
     }
 }
-impl<M: DebugOnFeature> Polynomial<M> {
+impl<M: crate::sealed::Sized> Polynomial<M> {
     fn len(&self) -> usize {
         self.coef.len()
     }
@@ -113,7 +114,7 @@ impl<M: DebugOnFeature> Polynomial<M> {
 // additive group
 impl<G> Neg for Polynomial<G>
 where
-    G: Neg<Output = G> + DebugOnFeature,
+    G: sealed::Sized + Neg<Output = G>,
 {
     type Output = Self;
     fn neg(self) -> Self {
@@ -122,8 +123,8 @@ where
         }
     }
 }
-pub trait SubAssignRequire<G>: Clone + Zero + for<'x> SubAssign<&'x G> + DebugOnFeature {}
-impl<G> SubAssignRequire<G> for G where G: Clone + Zero + for<'x> SubAssign<&'x G> + DebugOnFeature {}
+pub trait SubAssignRequire<G>: sealed::Sized + Clone + Zero + for<'x> SubAssign<&'x G> {}
+impl<G> SubAssignRequire<G> for G where G: sealed::Sized + Clone + Zero + for<'x> SubAssign<&'x G> {}
 impl<'a, G: SubAssignRequire<G>> SubAssign<&'a Polynomial<G>> for Polynomial<G> {
     fn sub_assign(&mut self, other: &Polynomial<G>) {
         let len = self.len();
@@ -244,7 +245,7 @@ where
         Ok(())
     }
 }
-impl<R: DebugOnFeature> Polynomial<R> {
+impl<R: sealed::Sized> Polynomial<R> {
     pub fn eval<'a>(&self, x: &'a R) -> R
     where
         R: AddAssignRequire<R> + One + MulAssign<&'a R>,
@@ -320,7 +321,7 @@ where
         self.monic();
     }
 }
-impl<K: DebugOnFeature> Polynomial<K> {
+impl<K: sealed::Sized> Polynomial<K> {
     pub fn monic(&mut self)
     where
         K: Clone + for<'x> DivAssign<&'x K>,

@@ -1,3 +1,4 @@
+use crate::sealed;
 use crate::*;
 use num_traits::{One, Zero};
 use polynomial::Polynomial;
@@ -56,7 +57,7 @@ fn test_gcd2() {
 }
 fn check_eea<T>(a: T, b: T) -> bool
 where
-    T: num_traits::Zero + num_traits::One + Clone + Eq + DebugOnFeature + RingNormalize,
+    T: sealed::Sized + Zero + One + Clone + Eq + RingNormalize,
     for<'x> &'x T: EuclideanRingOperation<T>,
 {
     let g = gcd::<T>(a.clone(), b.clone());
@@ -86,7 +87,7 @@ fn test_eea2() {
 }
 fn check_neea<T>(a: T, b: T) -> bool
 where
-    T: num_traits::Zero + num_traits::One + Clone + Eq + DebugOnFeature + RingNormalize,
+    T: sealed::Sized + Zero + One + Clone + Eq + RingNormalize,
     for<'x> &'x T: EuclideanRingOperation<T>,
 {
     let g = gcd::<T>(a.clone(), b.clone());
@@ -116,7 +117,7 @@ fn test_neea2() {
 }
 fn check_mod_inv<T>(a: T, m: T) -> Option<T>
 where
-    T: num_traits::Zero + num_traits::One + Clone + Eq + DebugOnFeature + RingNormalize,
+    T: sealed::Sized + Zero + One + Clone + Eq + RingNormalize,
     for<'x> &'x T: EuclideanRingOperation<T>,
 {
     modulo_inverse::<T>(a.clone(), m.clone()).map(|x| &(&(a * x) - &T::one()) % &m)
@@ -161,7 +162,7 @@ fn test_mod_inv2() {
 }
 fn check_crt<T>(u: &[T], m: &[T])
 where
-    T: Clone + Eq + num_traits::Zero + num_traits::One + RingNormalize + DebugOnFeature,
+    T: sealed::Sized + Clone + Eq + Zero + One + RingNormalize,
     for<'x> &'x T: EuclideanRingOperation<T>,
 {
     let a = chinese_remainder_theorem::<T>(u, m).unwrap();

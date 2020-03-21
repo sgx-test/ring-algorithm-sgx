@@ -1,9 +1,17 @@
-#![cfg_attr(feature = "debug", recursion_limit = "8")]
+#![cfg_attr(feature = "__internal_inject_debug", recursion_limit = "8")]
+mod sealed {
+    pub trait SizedExt: std::marker::Sized + std::fmt::Debug + std::fmt::Display {}
+    impl<T> SizedExt for T where T: std::marker::Sized + std::fmt::Debug + std::fmt::Display {}
+    #[cfg(not(feature = "__internal_inject_debug"))]
+    pub use std::marker::Sized;
+    #[cfg(feature = "__internal_inject_debug")]
+    pub use SizedExt as Sized;
+}
 mod polynomial;
 mod ring_traits;
 #[cfg(test)]
 mod test;
-pub use ring_traits::{DebugOnFeature, EuclideanRingOperation, RingNormalize};
+pub use ring_traits::{EuclideanRingOperation, RingNormalize};
 
 /** calcurate $`pa`$ with mutliprecation by doubling
 ```
@@ -13,7 +21,7 @@ assert_eq!(times::<i32>(2, 16), 32);
 */
 pub fn times<T>(a: T, mut p: u64) -> T
 where
-    T: num_traits::Zero + for<'x> std::ops::AddAssign<&'x T> + DebugOnFeature,
+    T: sealed::Sized + num_traits::Zero + for<'x> std::ops::AddAssign<&'x T>,
     for<'x> &'x T: std::ops::Add<Output = T>,
 {
     let mut x = T::zero();
@@ -39,7 +47,7 @@ assert_eq!(power::<i32>(2, 16), 65536);
 */
 pub fn power<T>(a: T, mut p: u64) -> T
 where
-    T: num_traits::One + for<'x> std::ops::MulAssign<&'x T> + DebugOnFeature,
+    T: sealed::Sized + num_traits::One + for<'x> std::ops::MulAssign<&'x T>,
     for<'x> &'x T: std::ops::Mul<Output = T>,
 {
     let mut x = T::one();
@@ -68,7 +76,7 @@ assert_eq!(gcd::<i32>(0, 0), 0);
 */
 pub fn gcd<T>(mut x: T, mut y: T) -> T
 where
-    T: num_traits::Zero + DebugOnFeature,
+    T: sealed::Sized + num_traits::Zero,
     for<'x> &'x T: std::ops::Rem<Output = T>,
 {
     while !y.is_zero() {
@@ -83,7 +91,7 @@ where
 */
 pub fn is_coprime<T>(x: T, y: T) -> bool
 where
-    T: Eq + num_traits::Zero + num_traits::One + RingNormalize + DebugOnFeature,
+    T: sealed::Sized + Eq + num_traits::Zero + num_traits::One + RingNormalize,
     for<'x> &'x T: std::ops::Rem<Output = T>,
 {
     gcd::<T>(x, y).into_normalize().is_one()
@@ -103,7 +111,7 @@ assert_eq!(d, x * a + y * b);
  */
 pub fn extended_euclidian_algorithm<T>(x: T, y: T) -> (T, T, T)
 where
-    T: num_traits::Zero + num_traits::One + DebugOnFeature,
+    T: sealed::Sized + num_traits::Zero + num_traits::One,
     for<'x> &'x T: EuclideanRingOperation<T>,
 {
     let mut old = (x, T::one(), T::zero());
@@ -133,7 +141,7 @@ assert_eq!(d, x * a + y * b);
 */
 pub fn normalized_extended_euclidian_algorithm<T>(x: T, y: T) -> (T, T, T)
 where
-    T: num_traits::Zero + num_traits::One + RingNormalize + DebugOnFeature,
+    T: sealed::Sized + num_traits::Zero + num_traits::One + RingNormalize,
     for<'x> &'x T: EuclideanRingOperation<T>,
 {
     let lc_x = x.leading_unit();
@@ -168,7 +176,7 @@ assert_eq!((a * b - 1) % m, 0);
 */
 pub fn modulo_inverse<T>(a: T, m: T) -> Option<T>
 where
-    T: Eq + num_traits::Zero + num_traits::One + RingNormalize + DebugOnFeature,
+    T: sealed::Sized + Eq + num_traits::Zero + num_traits::One + RingNormalize,
     for<'x> &'x T: EuclideanRingOperation<T>,
 {
     let (gcd, inv_a, _) = normalized_extended_euclidian_algorithm::<T>(a, m);
@@ -193,7 +201,7 @@ assert_eq!((b * x - a) % m, 0);
 */
 pub fn modulo_divison<T>(a: T, b: T, m: T) -> Option<T>
 where
-    T: Eq + num_traits::Zero + num_traits::One + RingNormalize + DebugOnFeature,
+    T: sealed::Sized + Eq + num_traits::Zero + num_traits::One + RingNormalize,
     for<'x> &'x T: EuclideanRingOperation<T>,
 {
     let (gcd, inv_b, _) = normalized_extended_euclidian_algorithm::<T>(b, m);
@@ -218,7 +226,7 @@ for (u, m) in u.iter().zip(m.iter()) {
 */
 pub fn chinese_remainder_theorem<T>(u: &[T], m: &[T]) -> Option<T>
 where
-    T: Clone + Eq + num_traits::Zero + num_traits::One + RingNormalize + DebugOnFeature,
+    T: sealed::Sized + Clone + Eq + num_traits::Zero + num_traits::One + RingNormalize,
     for<'x> &'x T: EuclideanRingOperation<T>,
 {
     if u.len() != m.len() {
