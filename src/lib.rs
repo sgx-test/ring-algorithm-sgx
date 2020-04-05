@@ -7,7 +7,6 @@ mod sealed {
     #[cfg(feature = "__internal_inject_debug")]
     pub use SizedExt as Sized;
 }
-mod polynomial;
 mod ring_traits;
 #[cfg(test)]
 mod test;

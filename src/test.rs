@@ -1,7 +1,23 @@
 use crate::sealed;
 use crate::*;
 use num_traits::{One, Zero};
-use polynomial::Polynomial;
+use polynomial_ring::Polynomial;
+impl<K> RingNormalize for Polynomial<K>
+where
+    K: polynomial_ring::AddAssignRequire<K> + One + for<'x> std::ops::DivAssign<&'x K>,
+    for<'x> &'x K: std::ops::Mul<Output = K>,
+{
+    fn leading_unit(&self) -> Self {
+        if let Some(x) = self.lc() {
+            Self::from_monomial(x.clone(), 0)
+        } else {
+            Self::one()
+        }
+    }
+    fn normalize_mut(&mut self) {
+        self.monic();
+    }
+}
 
 macro_rules! poly {
     ($($x:expr),*) => {

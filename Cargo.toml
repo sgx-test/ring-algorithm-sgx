@@ -1,6 +1,6 @@
 [package]
 name = "ring-algorithm"
-version = "0.2.0"
+version = "0.2.1"
 authors = ["Toru3 <ryuutet@gmail.com>"]
 edition = "2018"
 description = "algorithms on ring(Abstruct Algebra)"
@@ -9,7 +9,7 @@ documentation = "https://docs.rs/ring-algorithm/"
 homepage = "https://crates.io/crates/ring-algorithm"
 repository = "https://gitlab.com/Toru3/ring-algorithm"
 readme = "README.md"
-keywords = ["algorithm", "ring", "algebra", "polynomial"]
+keywords = ["algorithm", "ring", "algebra"]
 categories = ["algorithms", "mathematics"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -19,6 +19,7 @@ num-traits = "0.2.11"
 take_mut = "0.2.2"
 [dev-dependencies]
 num = "0.2.1"
+polynomial-ring = "0.1.1"
 [features]
 default = []
 __internal_inject_debug = [] # DO NOT USE
