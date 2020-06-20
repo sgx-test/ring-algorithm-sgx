@@ -90,10 +90,10 @@ macro_rules! ring_normalize {
         impl RingNormalize for $t {
             fn leading_unit(&self) -> Self {
                 use num_traits::{One, Zero};
-                if self >= &<$t>::zero() {
-                    <$t>::one()
+                if self >= &Self::zero() {
+                    Self::one()
                 } else {
-                    -<$t>::one()
+                    -Self::one()
                 }
             }
             fn normalize_mut(&mut self) {
@@ -109,3 +109,19 @@ ring_normalize!(i32);
 ring_normalize!(i64);
 ring_normalize!(i128);
 ring_normalize!(isize);
+
+impl RingNormalize for num_bigint::BigInt {
+    fn leading_unit(&self) -> Self {
+        use num_traits::One;
+        if self.sign() == num_bigint::Sign::Minus {
+            -Self::one()
+        } else {
+            Self::one()
+        }
+    }
+    fn normalize_mut(&mut self) {
+        if self.sign() == num_bigint::Sign::Minus {
+            *self = -&*self
+        }
+    }
+}

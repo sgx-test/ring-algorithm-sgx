@@ -1,6 +1,6 @@
 [package]
 name = "ring-algorithm"
-version = "0.2.1"
+version = "0.2.2"
 authors = ["Toru3 <ryuutet@gmail.com>"]
 edition = "2018"
 description = "algorithms on ring(Abstruct Algebra)"
@@ -17,8 +17,9 @@ categories = ["algorithms", "mathematics"]
 [dependencies]
 num-traits = "0.2.11"
 take_mut = "0.2.2"
+num-bigint = "0.3.0"
 [dev-dependencies]
-num = "0.2.1"
+num = "0.3.0"
 polynomial-ring = "0.1.1"
 [features]
 default = []
