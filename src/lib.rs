@@ -10,7 +10,7 @@ mod sealed {
 mod ring_traits;
 #[cfg(test)]
 mod test;
-pub use ring_traits::{EuclideanRingOperation, RingNormalize};
+pub use ring_traits::{EuclideanRingOperation, RingNormalize, RingOperation};
 
 /** calcurate $`pa`$ with mutliprecation by doubling
 ```
