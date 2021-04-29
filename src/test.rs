@@ -4,7 +4,7 @@ use num_traits::{One, Zero};
 use polynomial_ring::Polynomial;
 impl<K> RingNormalize for Polynomial<K>
 where
-    K: polynomial_ring::AddAssignRequire<K> + One + for<'x> std::ops::DivAssign<&'x K>,
+    K: Clone + Zero + One + for<'x> std::ops::AddAssign<&'x K> + for<'x> std::ops::DivAssign<&'x K>,
     for<'x> &'x K: std::ops::Mul<Output = K>,
 {
     fn leading_unit(&self) -> Self {
@@ -21,12 +21,12 @@ where
 
 macro_rules! poly {
     ($($x:expr),*) => {
-        Polynomial::new(vec![$(num::Rational::from_integer($x)),*])
+        Polynomial::new(vec![$(num::Rational64::from_integer($x)),*])
     }
 }
 macro_rules! expand_poly {
     ($([$($x:expr),*]),*) => {
-        vec![$(poly![$($x),*]),*].into_iter().product::<Polynomial<num::Rational>>()
+        vec![$(poly![$($x),*]),*].into_iter().product::<Polynomial<num::Rational64>>()
     }
 }
 
@@ -39,7 +39,7 @@ fn test_times() {
 }
 #[test]
 fn test_power() {
-    type R = Polynomial<num::Rational>;
+    type R = Polynomial<num::Rational64>;
     assert_eq!(power::<i32>(3, 4), 81);
     let a = poly![1, 1];
     let b = poly![1, 4, 6, 4, 1];
@@ -55,7 +55,7 @@ fn test_gcd() {
 }
 #[test]
 fn test_gcd2() {
-    type R = Polynomial<num::Rational>;
+    type R = Polynomial<num::Rational64>;
     let z = R::zero();
     assert_eq!(gcd::<R>(z.clone(), z.clone()), z.clone());
     let a = expand_poly![[2], [1, 1], [2, 1], [3, 1]];
@@ -90,7 +90,7 @@ fn test_eea() {
 }
 #[test]
 fn test_eea2() {
-    type R = Polynomial<num::Rational>;
+    type R = Polynomial<num::Rational64>;
     let z = R::zero();
     check_eea::<R>(z.clone(), z.clone());
     let a = expand_poly![[2], [1, 1], [2, 1], [3, 1]];
@@ -120,7 +120,7 @@ fn test_neea() {
 }
 #[test]
 fn test_neea2() {
-    type R = Polynomial<num::Rational>;
+    type R = Polynomial<num::Rational64>;
     let z = R::zero();
     check_eea::<R>(z.clone(), z.clone());
     let a = expand_poly![[2], [1, 1], [2, 1], [3, 1]];
@@ -153,7 +153,7 @@ fn test_mod_inv() {
 }
 #[test]
 fn test_mod_inv2() {
-    type R = Polynomial<num::Rational>;
+    type R = Polynomial<num::Rational64>;
     // not exists inverse
     let z = R::zero();
     let a = expand_poly![[2], [1, 1], [2, 1], [3, 1]];
@@ -188,7 +188,7 @@ where
 }
 #[test]
 fn test_crt() {
-    type R = Polynomial<num::Rational>;
+    type R = Polynomial<num::Rational64>;
     let u = vec![2, 3, 2];
     let m = vec![3, 5, 7];
     check_crt::<i32>(&u, &m);
