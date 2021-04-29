@@ -190,20 +190,20 @@ where
 
 calc x ($`bx \equiv a \pmod{m}`$)
 ```
-use ring_algorithm::modulo_divison;
+use ring_algorithm::modulo_division;
 let a = 42;
 let b = 32;
 let m = 98;
-let x = modulo_divison::<i32>(a, b, m).unwrap();
+let x = modulo_division::<i32>(a, b, m).unwrap();
 assert_eq!((b * x - a) % m, 0);
 ```
 */
-pub fn modulo_divison<T>(a: T, b: T, m: T) -> Option<T>
+pub fn modulo_division<T>(a: T, b: T, m: T) -> Option<T>
 where
-    T: sealed::Sized + Eq + num_traits::Zero + num_traits::One + RingNormalize,
+    T: sealed::Sized + Clone + Eq + num_traits::Zero + num_traits::One + RingNormalize,
     for<'x> &'x T: EuclideanRingOperation<T>,
 {
-    let (gcd, inv_b, _) = normalized_extended_euclidian_algorithm::<T>(b, m);
+    let (gcd, inv_b, _) = normalized_extended_euclidian_algorithm::<T>(b, m.clone());
     if (&a % &gcd).is_zero() {
         Some(&a / &gcd * inv_b)
     } else {
