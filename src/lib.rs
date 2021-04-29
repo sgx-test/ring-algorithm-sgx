@@ -205,7 +205,7 @@ where
 {
     let (gcd, inv_b, _) = normalized_extended_euclidian_algorithm::<T>(b, m.clone());
     if (&a % &gcd).is_zero() {
-        Some(&a / &gcd * inv_b)
+        Some(&(&a / &gcd * inv_b) % &m)
     } else {
         None
     }
