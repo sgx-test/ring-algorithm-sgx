@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 pub trait UnitaryRing<Output = Self>:
     Sized
     + Clone
